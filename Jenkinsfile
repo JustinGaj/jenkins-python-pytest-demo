@@ -4,11 +4,18 @@ pipeline {
     stages {
         stage('Install dependencies') {
             steps {
-                sh 'sudo apt-get update'
-                sh 'sudo apt-get install -y python3 python3-venv'
-                sh 'python3 -m venv venv'
-                sh './venv/bin/pip install -r requirements.txt'
-            }
+                    sh '''
+                        # 1. Update package list and install Python and venv (No sudo needed)
+                        apt-get update
+                        apt-get install -y python3 python3-venv
+
+                        # 2. Create the virtual environment
+                        python3 -m venv venv
+
+                        # 3. Install project dependencies into the venv
+                        ./venv/bin/pip install -r requirements.txt
+                    '''
+                }
         }
 
         stage('Run tests') {
