@@ -22,22 +22,18 @@ pipeline {
         }
     }
     post {
-        // This 'always' block runs regardless of the build result
         always {
-            // Send a success/failure message
             slackSend(
-                channel: '#builds', // e.g., '#devops-alerts'
-                color: 'good',                 // default color if successful
+                channel: '#builds',
+                color: 'good',
                 message: "Build ${currentBuild.fullDisplayName} completed. Status: ${currentBuild.currentResult}",
-                // credentialsId is optional if you configure the global settings
             )
         }
         
-        // This 'failure' block overrides the 'always' color if the build fails
         failure {
             slackSend(
                 channel: '#builds',
-                color: 'danger', // Red for failure
+                color: 'danger',
                 message: "🔴 FAILURE: Build ${currentBuild.fullDisplayName} failed! Check console output: ${env.BUILD_URL}"
             )
         }
